@@ -26,12 +26,12 @@ class PyProjectData(KivySchoolData):
     pyproject_toml = StringProperty()
 
     def __init__(self, *args, **kwargs) -> None:
+        data: dict = kwargs.pop("data", None)
+        if data:
+            self.ios = self.IOS(data["ios"]) if "ios" in data else None
+            self.macos = self.MacOS(data["macos"]) if "macos" in data else None
+            self.android = self.Android(data["android"]) if "android" in data else None
         super().__init__(*args, **kwargs)
-        print(self.data)
-
-    def on_data(self, *args) -> None:
-        print(self.data.app_name)
-
 
 
     def save(self, *args) -> None:
@@ -186,8 +186,8 @@ with open(toml_path, "r") as f:
     full_toml_dict = toml.load(f)
 
 kivy_school_dict = full_toml_dict.get("tool", {}).get("kivy-school", {})
-datamodel = PyProjectData()
-datamodel.data = KivySchoolData(data=kivy_school_dict)
+datamodel = PyProjectData(data=kivy_school_dict)
+#datamodel.data = KivySchoolData(data=kivy_school_dict)
 datamodel.pyproject_toml = toml.dumps(full_toml_dict)
 
 event_handler = TomlChangeHandler(datamodel, toml_path)

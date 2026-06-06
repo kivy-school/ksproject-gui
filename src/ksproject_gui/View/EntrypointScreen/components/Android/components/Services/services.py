@@ -47,7 +47,7 @@ class Services(CTab):
         """
         datamodel.bind(android_services=self.update_services_ui)
 
-        self.update_services_ui(datamodel, datamodel.android_services)
+        self.update_services_ui(datamodel, root.data.services)
 
     def update_services_ui(self, instance, services_list):
         """

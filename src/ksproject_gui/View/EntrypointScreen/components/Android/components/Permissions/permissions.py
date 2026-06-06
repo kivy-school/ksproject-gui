@@ -26,7 +26,7 @@ class Permissions(CTab):
         """
         datamodel.bind(android_permissions=self.update_permissions_ui)
 
-        self.update_permissions_ui(datamodel, datamodel.android_permissions)
+        self.update_permissions_ui(datamodel, root.data.permissions)
 
     def update_permissions_ui(self, instance, permissions_list):
         """

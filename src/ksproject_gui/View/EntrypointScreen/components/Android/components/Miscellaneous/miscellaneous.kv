@@ -3,7 +3,7 @@
 #: import color_picker libs.color_picker.color_picker
 
 <Miscellaneous>:
-
+    data: datamodel.android
     CStackLayout:
         size_hint: 1, 1
         padding: dp(16)
@@ -16,6 +16,7 @@
                 do_scroll_x: False
 
                 MiscellaneousLayout:
+                    data: root.data
 
             CDivider:
                 orientation: "vertical"
@@ -70,7 +71,7 @@
                     Color:
                         rgba: [1, 1, 1, 1]
                     SvgInstruction:
-                        svg_path: datamodel.android_icon
+                        svg_path: root.data.icon
                         svg_color: app.gray_10
                         size: self.size
                         pos: self.pos
@@ -151,13 +152,14 @@
     size_hint: None, None
     height: dp(560)
     width: dp(288)
-    bg_color: datamodel.android_presplash_color
+    bg_color: root.data.presplash_color
 
     AsyncImage:
-        source: datamodel.android_presplash
+        source: root.data.presplash
 
 
-<MiscellaneousLayout@CBoxLayout>
+<MiscellaneousLayout>
+    data: datamodel.android
     adaptive: [False, True]
     orientation: "vertical"
     spacing: dp(16)
@@ -181,13 +183,13 @@
 
             FileUploader:
                 id: icon_uploader
-                data_source: datamodel.android_icon
+                data_source: root.data.icon
 
         ImagePreview:
             id: image_preview
             source: icon_uploader.data_source
             on_source:
-                datamodel.android_icon = self.source
+                root.data.icon = self.source
             size_hint: None, None
             pos_hint: {"top": 1.0}
             size: [dp(128), dp(128)] if icon_uploader.data_source else [0, 0]
@@ -211,7 +213,7 @@
 
             FileUploader:
                 id: presplash_uploader
-                data_source: datamodel.android_presplash
+                data_source: root.data.presplash
 
             CBoxLayout:
                 adaptive: [False, True]
@@ -223,16 +225,16 @@
                     width: dp(288)
                     CTextInput:
                         id: presplash_color_input
-                        text: datamodel.android_presplash_color
+                        text: root.data.presplash_color
                     CTextInputLabel:
                         text: "Presplash color"
                     CTextInputTrailingIconButton:
                         icon: "checkmark"
                         on_press:
-                            datamodel.android_presplash_color = presplash_color_input.text
+                            root.data.presplash_color = presplash_color_input.text
 
                 CButtonCircular:
-                    bg_color: datamodel.android_presplash_color
+                    bg_color: root.data.presplash_color
                     radius: self.height/2
                     font_size: dp(48)
 
@@ -240,7 +242,7 @@
             id: image_preview
             source: presplash_uploader.data_source
             on_source:
-                datamodel.android_presplash = self.source
+                root.data.presplash = self.source
             size_hint: None, None
             pos_hint: {"top": 1.0}
             size: [dp(196), dp(196)] if icon_uploader.data_source else [0, 0]

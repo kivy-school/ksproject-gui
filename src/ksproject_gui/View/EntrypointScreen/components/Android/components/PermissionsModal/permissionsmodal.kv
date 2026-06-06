@@ -116,7 +116,7 @@
     bg_color: app.layer_01
     adaptive: [True, True]
     spacing: dp(16)
-    cstate: "disabled" if self.name in datamodel.android_permissions else "normal"
+    cstate: "disabled" if self.name in root.data.permissions else "normal"
 
     CLabelNeutral:
         text: root.name
