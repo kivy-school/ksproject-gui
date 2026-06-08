@@ -1,5 +1,5 @@
 
-<PermissionsModal>:
+<IPermissionsModal>:
     size_hint_y: 0.95
     width: dp(576)
 
@@ -51,7 +51,7 @@
                 id: rcv
                 do_scroll_x: False
                 size_hint: 1, 0.8
-                viewclass: "NewPermission"
+                viewclass: "INewPermission"
                 # key_viewclass: "NewPermission"
                 data: root.available_perms
                 scroll_type: ['bars', 'content']
@@ -98,12 +98,12 @@
                     role: "Extra Large"
                     size_hint_x: 1
                     on_press:
-                        app.data.save()
+                        datamodel.save()
                         root.dismiss()
 
     CModalCloseButton:
 
-<NewPermission>:
+<INewPermission>:
     canvas.after:
         Color:
             rgba: app.interactive if root.cstate == "normal" else app.support_success
@@ -115,7 +115,7 @@
     bg_color: app.layer_01
     adaptive: [True, True]
     spacing: dp(16)
-    cstate: "disabled" if self.name in root.data.permissions else "normal"
+    cstate: "disabled" #if self.name in datamodel.android_permissions else "normal"
 
     CLabelNeutral:
         text: root.name

@@ -7,21 +7,20 @@ from kivy.properties import ListProperty, StringProperty
 from carbonkivy.uix.modal import CModal
 from carbonkivy.uix.boxlayout import CBoxLayout
 
-from ksproject_gui.libs.fetch_permissions import AndroidPermissionAPI
-#from ksproject_gui.libs.datamodel import datamodel
+from libs.fetch_permissions import IOSPermissionAPI
+from libs.datamodel import datamodel
 
-class NewPermission(CBoxLayout):
+class INewPermission(CBoxLayout):
     name = StringProperty()
 
 
-class PermissionsModal(CModal):
+class IPermissionsModal(CModal):
     available_perms = ListProperty()
 
     def __init__(self, *args, **kwargs) -> None:
-        super(PermissionsModal, self).__init__(*args, **kwargs)
+        super(IPermissionsModal, self).__init__(*args, **kwargs)
         self.app = App.get_running_app()
-        self.api = AndroidPermissionAPI()
-        # datamodel.bind(android_permissions=lambda e: self.ids.rcv.refresh_from_viewport())
+        self.api = IOSPermissionAPI()
 
         self._all_raw_perms = []
 

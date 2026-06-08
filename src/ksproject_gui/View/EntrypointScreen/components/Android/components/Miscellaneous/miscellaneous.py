@@ -3,11 +3,17 @@ from zoneinfo import ZoneInfo
 
 from carbonkivy.uix.tab import CTab
 from carbonkivy.uix.boxlayout import CBoxLayout
+from carbonkivy.uix.stacklayout import CStackLayout
+
+from kivy.factory import Factory
+
 from kivy.properties import StringProperty, ObjectProperty
 from kivy.clock import Clock
 
-from View.components.PreviewPane import PreviewPane
-from ksproject_gui.libs.datamodel import KivySchoolData
+from ksproject_gui.View.components.PreviewPane import PreviewPane
+from ksproject_gui.libs.datamodel import PyProjectData as KivySchoolData
+from ksproject_gui.uix.conditional_view import ConditionalView
+
 
 
 class AndroidPane(PreviewPane):
@@ -22,13 +28,46 @@ class AndroidPane(PreviewPane):
         self.time = datetime.now(ZoneInfo("UTC")).strftime("%H:%M")
 
 
-class Miscellaneous(CTab):
+
+
+class Miscellaneous(CStackLayout):
     data = ObjectProperty() # type: ObjectProperty[KivySchoolData.Android]
 
+    def __init__(self, data: KivySchoolData.Android, **kwargs):
+        self.data = data
+        super(Miscellaneous, self).__init__(**kwargs)
+
+class MiscellaneousTab(CTab, ConditionalView):
+    data = ObjectProperty() # type: ObjectProperty[KivySchoolData]
+
     def __init__(self, *args, **kwargs):
-        super(Miscellaneous, self).__init__(*args, **kwargs)
+        super(MiscellaneousTab, self).__init__(*args, **kwargs)
+
+
+# class MiscellaneousView(ConditionalView):
+#     data = ObjectProperty() # type: ObjectProperty[KivySchoolData]
+#     def __init__(self, *args, **kwargs):
+#         super(MiscellaneousView, self).__init__(*args, **kwargs)
+
+    def on_data(self, _, data: KivySchoolData) -> None:
+        #data.bind(android=self.on_android_data)
+        #if data.android:
+        self.on_android_data(self, data)
+    
+    def on_android_data(self, _, android_data: KivySchoolData.Android | None) -> None:
+        self.condition = android_data != None
+
+    def get_content(self) -> Miscellaneous | None:
+        if self.data:
+            if self.data.android:
+                return None
+                #raise Exception("MiscellaneousTab content is not implemented yet.")
+                return Miscellaneous(self.data.android)
+        return None
+
 
 class MiscellaneousLayout(CBoxLayout):
     data = ObjectProperty() # type: ObjectProperty[KivySchoolData.Android]
     def __init__(self, *args, **kwargs):
         super(MiscellaneousLayout, self).__init__(*args, **kwargs)
+

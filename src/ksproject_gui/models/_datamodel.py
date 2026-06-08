@@ -13,7 +13,7 @@ class PyProjectData(EventDispatcher):
         
         api = NumericProperty(allownone=True) # type: int | None
         
-        min_api = NumericProperty(allownone=True) # type: int | None
+        api_min = NumericProperty(allownone=True) # type: int | None
         
         sdk = StringProperty(allownone=True)
         
@@ -52,13 +52,10 @@ class PyProjectData(EventDispatcher):
         version_name = StringProperty(allownone=True)
 
         def __init__(self, data: dict):
-            self.update(data)
-
-        def update(self, data: dict):
             self.package_name = str(data.get("package_name"))
             self.archs = list(data.get("archs"))
             self.api = int(data.get("api")) if "api" in data else None
-            self.min_api = int(data.get("min_api")) if "min_api" in data else None
+            self.api_min = int(data.get("api_min")) if "api_min" in data else None
             self.sdk = str(data.get("sdk")) if "sdk" in data else None
             self.ndk = str(data.get("ndk")) if "ndk" in data else None
             self.ndk_api = int(data.get("ndk_api")) if "ndk_api" in data else None
@@ -78,19 +75,6 @@ class PyProjectData(EventDispatcher):
             self.version_code = int(data.get("version_code")) if "version_code" in data else 0
             self.version_name = str(data.get("version_name")) if "version_name" in data else None
 
-        @staticmethod
-        def validate_data(data: dict) -> bool:
-            if "package_name" not in data:
-                print("Android data validation failed: 'package_name' is required.")
-                return False
-            if "archs" not in data:
-                print("Android data validation failed: 'archs' is required.")
-                return False
-            
-            return True
-        
-            
-
     class IOS(EventDispatcher):
         
         bundle_id = StringProperty(allownone=True)
@@ -108,9 +92,6 @@ class PyProjectData(EventDispatcher):
         developer_team = StringProperty(allownone=True)
 
         def __init__(self, data: dict):
-            self.update(data)
-
-        def update(self, data: dict):
             self.bundle_id = str(data.get("bundle_id"))
             self.info_plist = dict[str, object](data.get("info_plist")) if "info_plist" in data else {}
             self.entitlements = dict[str, object](data.get("entitlements")) if "entitlements" in data else {}
@@ -140,9 +121,6 @@ class PyProjectData(EventDispatcher):
         app_subcategory = StringProperty(allownone=True)
 
         def __init__(self, data: dict):
-            self.update(data)
-
-        def update(self, data: dict):
             self.bundle_id = str(data.get("bundle_id"))
             self.info_plist = dict[str, object](data.get("info_plist")) if "info_plist" in data else None
             self.entitlements = dict[str, object](data.get("entitlements")) if "entitlements" in data else None

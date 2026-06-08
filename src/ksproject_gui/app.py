@@ -27,8 +27,10 @@ from kivy.utils import platform
 ROOT = os.path.dirname(__file__)
 
 
-from View.base_screen import LoadingLayout
-from Model.application_layer_model import ApplicationLayerModel
+from .View.base_screen import LoadingLayout
+from .Model.application_layer_model import ApplicationLayerModel
+
+from .models.datamodel import PyProjectData
 
 from thorvg_cython import Engine
 
@@ -65,6 +67,8 @@ class MainScreen(CScreen):
 
 class KsprojectApp(CarbonApp):
 
+    data: PyProjectData = PyProjectData()
+
     def __init__(self, *args, **kwargs):
         super(KsprojectApp, self).__init__(*args, **kwargs)
         self.theme = "Gray100"
@@ -87,9 +91,9 @@ class KsprojectApp(CarbonApp):
 
     def generate_application_screens(self, *args) -> None:
         # adds different screen widgets to the screen manager
-        import View.screens
+        from .View import screens as _screens
 
-        screens = View.screens.screens
+        screens = _screens.screens
 
         for i, name_screen in enumerate(screens.keys()):
             model = screens[name_screen]["model"]()

@@ -1,13 +1,14 @@
-from kivy.properties import StringProperty, OptionProperty, BooleanProperty
+from kivy.properties import ObjectProperty, StringProperty, OptionProperty, BooleanProperty
 from kivy.clock import Clock
 
 from carbonkivy.uix.tab import CTab
 from carbonkivy.behaviors import HoverBehavior
+from ksproject_gui.libs.datamodel import PyProjectData
 
 from View.components.RoundedBoxLayout import RoundedBoxLayout
 from ..ServicesModal import ServicesModal
 
-from libs.datamodel import datamodel
+#from libs.datamodel import datamodel
 
 
 class Service(HoverBehavior, RoundedBoxLayout):
@@ -35,10 +36,30 @@ class Service(HoverBehavior, RoundedBoxLayout):
 
 
 class Services(CTab):
+    data = ObjectProperty() # type: ObjectProperty[PyProjectData.Android]
+    #android_data = ObjectProperty() # type: ObjectProperty[PyProjectData.Android]
+
     def __init__(self, *args, **kwargs):
         super(Services, self).__init__(*args, **kwargs)
         self.modal = ServicesModal()
-        Clock.schedule_once(self._setup_bindings)
+        #self.bind(data=self.on_data)
+        #self.bind(android_data=self.on_android_data)
+        #Clock.schedule_once(self._setup_bindings)
+
+    def on_data(self, _, data: PyProjectData.Android) -> None:
+        # if data:
+        #     self.android_data = data.android
+        # else:
+        #     self.android_data = None
+        pass
+
+    def on_android_data(self, _, data: PyProjectData.Android) -> None:
+        if data:
+            self._setup_bindings(None, self.data)
+        else:
+            # Clear the UI if there's no android data
+            layout = self.ids.ServiceLayout
+            layout.clear_widgets()
 
     def _setup_bindings(self, dt=None):
         """

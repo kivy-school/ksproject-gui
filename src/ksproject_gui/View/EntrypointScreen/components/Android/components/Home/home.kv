@@ -1,133 +1,135 @@
-#: import datamodel libs.datamodel.datamodel
 
 <Home>:
-    data: datamodel.android
-    CStackLayout:
-        size_hint: [1, 1]
+    data: app.data
+    #HomeLayout:
+    #    data: root.data.android
 
-        CBoxLayout:
-            adaptive: [False, False]
-            spacing: dp(16)
+<HomeLayout>:
+    size_hint: [1, 1]
 
-            ScrollView:
-                always_overscroll: False
+    CBoxLayout:
+        adaptive: [False, False]
+        spacing: dp(16)
 
-                CGridLayout:
-                    responsive: True
-                    padding: [dp(2), 0]
-                    min_cols: 2
-                    cols: 2
-                    max_cols: 2
+        ScrollView:
+            always_overscroll: False
+
+            CGridLayout:
+                responsive: True
+                padding: [dp(2), 0]
+                min_cols: 2
+                cols: 2
+                max_cols: 2
+                adaptive: [False, True]
+                spacing: dp(16)
+
+                RoundedBoxLayout:
+                    bg_color: app.layer_01
                     adaptive: [False, True]
-                    spacing: dp(16)
+                    padding: [dp(16), dp(32), dp(16), dp(32)]
 
-                    RoundedBoxLayout:
-                        bg_color: app.layer_01
-                        adaptive: [False, True]
-                        padding: [dp(16), dp(32), dp(16), dp(32)]
+                    CTextInputLayout:
+                        CTextInput:
+                            # Two-way binding for strings
+                            text: root.data.package_name or ""
+                            on_text: root.data.package_name = self.text
+                        CTextInputLabel:
+                            text: "Package name"
+                            -color: app.text_primary
+                            weight_style: "SemiBold"
+                        CTextInputHelperText:
+                            text: "e.g. com.kivyschool.yourapp"
 
-                        CTextInputLayout:
-                            CTextInput:
-                                # Two-way binding for strings
-                                text: root.data.package_name or ""
-                                on_text: root.data.package_name = self.text
-                            CTextInputLabel:
-                                text: "Package name"
-                                -color: app.text_primary
-                                weight_style: "SemiBold"
-                            CTextInputHelperText:
-                                text: "e.g. com.kivyschool.yourapp"
+                RoundedBoxLayout:
+                    bg_color: app.layer_01
+                    adaptive: [False, True]
+                    padding: [dp(16), dp(32), dp(16), dp(32)]
 
-                    RoundedBoxLayout:
-                        bg_color: app.layer_01
-                        adaptive: [False, True]
-                        padding: [dp(16), dp(32), dp(16), dp(32)]
+                    CTextInputLayout:
+                        CTextInput:
+                            text: str(root.data.min_api or "")
+                            on_text: root.data.min_api = int(self.text) if self.text.isdigit() else None
+                        CTextInputLabel:
+                            text: "Minimum api version"
+                            -color: app.text_primary
+                            weight_style: "SemiBold"
+                        CTextInputHelperText:
+                            text: "recommended: 24"
 
-                        CTextInputLayout:
-                            CTextInput:
-                                text: str(root.data.min_api or "")
-                                on_text: root.data.min_api = int(self.text) if self.text.isdigit() else None
-                            CTextInputLabel:
-                                text: "Minimum api version"
-                                -color: app.text_primary
-                                weight_style: "SemiBold"
-                            CTextInputHelperText:
-                                text: "recommended: 24"
+                RoundedBoxLayout:
+                    bg_color: app.layer_01
+                    adaptive: [False, True]
+                    padding: [dp(16), dp(32), dp(16), dp(32)]
 
-                    RoundedBoxLayout:
-                        bg_color: app.layer_01
-                        adaptive: [False, True]
-                        padding: [dp(16), dp(32), dp(16), dp(32)]
+                    CTextInputLayout:
+                        CTextInput:
+                            text: str(root.data.api or "")
+                            on_text: root.data.api = int(self.text) if self.text.isdigit() else None
+                        CTextInputLabel:
+                            text: "Maximum api version"
+                            -color: app.text_primary
+                            weight_style: "SemiBold"
+                        CTextInputHelperText:
+                            text: "recommended: 36"
 
-                        CTextInputLayout:
-                            CTextInput:
-                                text: str(root.data.api or "")
-                                on_text: root.data.api = int(self.text) if self.text.isdigit() else None
-                            CTextInputLabel:
-                                text: "Maximum api version"
-                                -color: app.text_primary
-                                weight_style: "SemiBold"
-                            CTextInputHelperText:
-                                text: "recommended: 36"
+                RoundedBoxLayout:
+                    bg_color: app.layer_01
+                    adaptive: [False, True]
+                    padding: [dp(16), dp(32), dp(16), dp(32)]
 
-                    RoundedBoxLayout:
-                        bg_color: app.layer_01
-                        adaptive: [False, True]
-                        padding: [dp(16), dp(32), dp(16), dp(32)]
+                    CTextInputLayout:
+                        CTextInput:
+                            text: root.data.sdk or ""
+                            on_text: root.data.sdk = self.text
+                        CTextInputLabel:
+                            text: "Android sdk version"
+                            -color: app.text_primary
+                            weight_style: "SemiBold"
+                        CTextInputHelperText:
+                            text: "recommended: 36"
 
-                        CTextInputLayout:
-                            CTextInput:
-                                text: root.data.sdk or ""
-                                on_text: root.data.sdk = self.text
-                            CTextInputLabel:
-                                text: "Android sdk version"
-                                -color: app.text_primary
-                                weight_style: "SemiBold"
-                            CTextInputHelperText:
-                                text: "recommended: 36"
+                RoundedBoxLayout:
+                    bg_color: app.layer_01
+                    adaptive: [False, True]
+                    padding: [dp(16), dp(32), dp(16), dp(32)]
 
-                    RoundedBoxLayout:
-                        bg_color: app.layer_01
-                        adaptive: [False, True]
-                        padding: [dp(16), dp(32), dp(16), dp(32)]
+                    CTextInputLayout:
+                        CTextInput:
+                            text: root.data.ndk or ""
+                            on_text: root.data.ndk = self.text
+                        CTextInputLabel:
+                            text: "Android ndk version"
+                            -color: app.text_primary
+                            weight_style: "SemiBold"
+                        CTextInputHelperText:
+                            text: "recommended: 28c"
 
-                        CTextInputLayout:
-                            CTextInput:
-                                text: root.data.ndk or ""
-                                on_text: root.data.ndk = self.text
-                            CTextInputLabel:
-                                text: "Android ndk version"
-                                -color: app.text_primary
-                                weight_style: "SemiBold"
-                            CTextInputHelperText:
-                                text: "recommended: 28c"
+                RoundedBoxLayout:
+                    bg_color: app.layer_01
+                    adaptive: [False, True]
+                    padding: [dp(16), dp(32), dp(16), dp(32)]
 
-                    RoundedBoxLayout:
-                        bg_color: app.layer_01
-                        adaptive: [False, True]
-                        padding: [dp(16), dp(32), dp(16), dp(32)]
+                    CTextInputLayout:
+                        CTextInput:
+                            text: str(root.data.ndk_api or "")
+                            on_text: root.data.ndk_api = int(self.text) if self.text.isdigit() else None
+                        CTextInputLabel:
+                            text: "Android ndk api version"
+                            -color: app.text_primary
+                            weight_style: "SemiBold"
+                        CTextInputHelperText:
+                            text: "recommended: =minapi=24"
 
-                        CTextInputLayout:
-                            CTextInput:
-                                text: str(root.data.ndk_api or "")
-                                on_text: root.data.ndk_api = int(self.text) if self.text.isdigit() else None
-                            CTextInputLabel:
-                                text: "Android ndk api version"
-                                -color: app.text_primary
-                                weight_style: "SemiBold"
-                            CTextInputHelperText:
-                                text: "recommended: =minapi=24"
+        CDivider:
+            orientation: "vertical"
 
-            CDivider:
-                orientation: "vertical"
+        ScrollView:
+            always_overscroll: False
 
-            ScrollView:
-                always_overscroll: False
-
-                RightLayout:
+            RightLayout:
 
 <RightLayout>:
-    data: datamodel.android
+    data: app.data.android
     adaptive: [False, True]
     orientation: "vertical"
     padding: [dp(2), dp(16), dp(16), dp(128)]
@@ -158,7 +160,7 @@
                 CRadioItem:
                     CCheckbox:
                         pos_hint: {"center_y": 0.5}
-                        active: "arm64-v8a" in [a.value for a in root.data.archs] if root.data.archs else False
+                        active: "arm64-v8a" in root.data.archs
                     CRadioButtonLabel:
                         text: "arm64-v8a"
                         pos_hint: {"center_y": 0.5}
@@ -166,7 +168,7 @@
                 CRadioItem:
                     CCheckbox:
                         pos_hint: {"center_y": 0.5}
-                        active: "x86_64" in [a.value for a in root.data.archs] if root.data.archs else False
+                        active: "x86_64" in root.data.archs
                     CRadioButtonLabel:
                         text: "x86_64"
                         pos_hint: {"center_y": 0.5}

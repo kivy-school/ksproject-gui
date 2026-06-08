@@ -1,6 +1,6 @@
 [project]
-name = "ksproject-gui"
-version = "0.1.0"
+name = "ksproject-studio"
+version = "0.0.1"
 description = "Add your description here"
 readme = "README.md"
 authors = [
@@ -11,11 +11,11 @@ dependencies = [
     "carbonkivy",
     "kaki>=0.1.9",
     "pyobjc>=12.2",
-    "thorvg-cython>=0.0.5.post1",
+    "thorvg-cython",
 ]
 
 [project.scripts]
-ksproject-gui = "ksproject_gui:main"
+ksproject-studio = "ksproject_studio:main"
 
 [build-system]
 requires = ["uv_build>=0.11.14,<0.12.0"]

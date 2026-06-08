@@ -13,7 +13,7 @@ from kivy.event import EventDispatcher
 #from ksproject_utils.pyproject_toml import KivySchoolData
 from ._datamodel import PyProjectData as _PyProjectData # generated from models.yaml
 
-class PyProjectData(_PyProjectData, FileSystemEventHandler):
+class PyProjectData(_PyProjectData):
     """
     wrapper for PyProjectData.
     """
@@ -31,35 +31,19 @@ class PyProjectData(_PyProjectData, FileSystemEventHandler):
 
     pyproject_toml = StringProperty(None, allownone=True) # type: StringProperty | None
 
-    watchdog_handler: "TomlChangeHandler"
+    
 
     def __init__(self, *args, **kwargs) -> None:
-        self.observer = Observer()
-        self.watchdog_handler = TomlChangeHandler(self, os.path.join(os.getcwd(), "pyproject.toml"))
-        #self.observer.start()
-        super(PyProjectData, self).__init__(*args, **kwargs)
-        #self.bind(pyproject_toml=self.reload_toml_path)
-        toml_path = os.path.join(os.getcwd(), "pyproject.toml")
-        self.pyproject_toml = toml_path
-        print(f"[PyProjectData] Initialized with pyproject.toml path: {toml_path}")
-        self.reload_toml_path(None, toml_path)
-        #raise Exception("PyProjectData is not fully implemented yet.")
-        #self.observer.start()
-        self.bind(android=self.on_android_data)
-
-    def on_android_data(self, _, android_data: _PyProjectData.Android | None) -> None:
-        print("PyProjectData Android data updated:", android_data)
-    # def on_any_event(self, event):
-    #     print(f"[PyProjectData] Event detected: {event}")
+        self.observer = Observer()     
+        super().__init__(*args, **kwargs)
+        self.bind(pyproject_toml=self.reload_toml_path)
 
     def on_modified(self, event):
-        raise Exception("PyProjectData on_modified is not implemented yet.")
         if os.path.abspath(event.src_path) == self.pyproject_toml:
             print(f"[Watchdog] Detected change in {self.pyproject_toml}. Reloading...")
             self.reload_toml_data(self.pyproject_toml)
 
     def reload_toml_path(self, _, path: str | None):
-        #raise Exception("PyProjectData reload_toml_path is not implemented yet.")
         if path:
             self.remove_observer()
             self.add_observer(path)
@@ -77,26 +61,17 @@ class PyProjectData(_PyProjectData, FileSystemEventHandler):
             data = full_toml_dict.get("tool", {}).get("kivy-school", {})
 
             if "android" in data:
-                if self.android:
-                    self.android.update(data["android"])
-                else:
-                    self.android = self.Android(data["android"])
+                self.android = self.Android(data["android"])
             else:
                 self.android = None
 
             if "ios" in data:
-                if self.ios:
-                    self.ios.update(data["ios"])
-                else:
-                    self.ios = self.IOS(data["ios"])
+                self.ios = self.IOS(data["ios"])
             else:
                 self.ios = None
             
             if "macos" in data:
-                if self.macos:
-                    self.macos.update(data["macos"])
-                else:
-                    self.macos = self.MacOS(data["macos"])
+                self.macos = self.MacOS(data["macos"])
             else:
                 self.macos = None
         else:
@@ -106,30 +81,12 @@ class PyProjectData(_PyProjectData, FileSystemEventHandler):
 
     def add_observer(self, path: str) -> None:
         #self.watchdog_handler = TomlChangeHandler(self, path)
-        #raise Exception("PyProjectData add_observer is not implemented yet.")
-        print(f"PyProjectData add_observer {os.path.dirname(path)}")
-        obs = self.observer
-        
-        # if not obs.is_alive():
-        #     obs.start()
-
-        obs.schedule(self.watchdog_handler, os.path.dirname(path), recursive=False)
-        obs.start()
-        print(f"PyProjectData observer scheduled for {path}")
-            
-        
-        
+        self.observer.schedule(self, os.path.dirname(path), recursive=False)
     
     def remove_observer(self) -> None:
-        #if hasattr(self, "watchdog_handler"):
-        #self.observer.unschedule(self)
-        #del self.watchdog_handler
-        obs = self.observer
-        # if obs.is_alive():
-        #     obs.stop()
-        #     obs.join()
-        #     obs.unschedule_all()
-            
+        if hasattr(self, "watchdog_handler"):
+            self.observer.unschedule(self.watchdog_handler)
+            del self.watchdog_handler
 
     def save(self, *args) -> None:
         """
@@ -251,15 +208,9 @@ class TomlChangeHandler(FileSystemEventHandler):
         self.toml_path = os.path.abspath(toml_path)
 
     def on_modified(self, event):
-        #print(f"[TomlChangeHandler] Detected event: {event.event_type} on {event.src_path}")
-        #raise Exception("TomlChangeHandler on_modified is not implemented yet.")
         if os.path.abspath(event.src_path) == self.toml_path:
             print(f"[Watchdog] Detected change in {self.toml_path}. Reloading...")
-            self._reload_toml(self.toml_path)
-
-    @mainthread
-    def _reload_toml(self, path):
-        self.datamodel.reload_toml_data(path)
+            self.reload_toml()
 
     @mainthread
     def reload_toml(self):

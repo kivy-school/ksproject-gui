@@ -1,4 +1,6 @@
 import os
+
+from ksproject_gui.libs.datamodel import PyProjectData
 import registers
 import threading
 import ssl
@@ -15,6 +17,8 @@ import time
 import weakref
 import webbrowser
 
+from kivy.factory import Factory
+
 from carbonkivy.app import CarbonApp
 from carbonkivy.devtools import LiveApp
 from carbonkivy.uix.screen import CScreen
@@ -26,8 +30,15 @@ from kivy.logger import Logger
 from kivy.utils import platform
 
 
-from View.base_screen import LoadingLayout
-from Model.application_layer_model import ApplicationLayerModel
+from .View.base_screen import LoadingLayout
+from .Model.application_layer_model import ApplicationLayerModel
+from .View.EntrypointScreen.components.Android.components.Miscellaneous.miscellaneous import Miscellaneous, MiscellaneousTab, MiscellaneousLayout
+Factory.register("Miscellaneous", cls=Miscellaneous)
+Factory.register("MiscellaneousTab", cls=MiscellaneousTab)
+Factory.register("MiscellaneousLayout", cls=MiscellaneousLayout)
+
+from .View.EntrypointScreen.components.Android.components.Home import HomeLayout
+Factory.register("HomeLayout", cls=HomeLayout)
 
 
 from thorvg_cython import Engine
@@ -61,7 +72,13 @@ class MainScreen(CScreen):
 
 class KsprojectApp(LiveApp, CarbonApp):
 
+    data: PyProjectData = PyProjectData()
+
     def __init__(self, *args, **kwargs):
+
+        self.engine = Engine()
+        self.engine.init()
+
         self.theme = "Gray100"
         self.DEBUG = True
         super(KsprojectApp, self).__init__(*args, **kwargs)
@@ -70,12 +87,12 @@ class KsprojectApp(LiveApp, CarbonApp):
         self.notification = CNotificationToast()
         self.view_model = ApplicationLayerModel()
         self._running = False
-        self.engine = Engine()
-        self.engine.init()
+        
 
 
     def build_app(self) -> UI:
         self.manager_screens = UI()
+        #return None
         self.main_screen = MainScreen(name="main screen")
         self.main_screen.ids.main_layout.add_widget(self.manager_screens)
         self.generate_application_screens()
@@ -86,11 +103,9 @@ class KsprojectApp(LiveApp, CarbonApp):
 
     def generate_application_screens(self, *args) -> None:
         # adds different screen widgets to the screen manager
-        import View.screens
+        from .View import screens
 
-        importlib.reload(View.screens)
-
-        screens = View.screens.screens
+        screens = screens.screens
 
         for i, name_screen in enumerate(screens.keys()):
             model = screens[name_screen]["model"]()

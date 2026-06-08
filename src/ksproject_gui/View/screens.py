@@ -1,6 +1,6 @@
-from View.EntrypointScreen.entrypoint_screen import EntrypointScreenView
+from .EntrypointScreen.entrypoint_screen import EntrypointScreenView
 
-from Model.entrypoint_screen import EntrypointScreenModel
+from ksproject_gui.Model.entrypoint_screen import EntrypointScreenModel
 
 screens = {
     'entrypoint screen': {
