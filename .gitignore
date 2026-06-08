@@ -217,4 +217,4 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 uv.lock
-src/ksproject_gui/.DS_Store
+src/ksproject_studio/.DS_Store
